@@ -89,6 +89,14 @@ font-weight:700;
 font-size:16px;
 background:linear-gradient(90deg,#00ff88,#00d4ff);
 color:#000;
+transition: opacity 0.3s ease;
+}
+.btn:disabled {
+opacity: 0.6;
+cursor: not-allowed;
+}
+.btn:active {
+transform: scale(0.98);
 }
 .note{
 margin-top:18px;
@@ -102,6 +110,34 @@ font-size:12px;
 color:#bdbdbd;
 }
 </style>
+
+<script>
+function trackLead(event) {
+  const btn = event.target;
+  
+  // Check if already clicked
+  if (btn.disabled) {
+    event.preventDefault();
+    return false;
+  }
+  
+  // Fire the pixel event
+  fbq('track', 'Lead', {value: 10.00, currency: 'INR'});
+  
+  // Disable button to prevent multiple clicks
+  btn.disabled = true;
+  btn.style.opacity = '0.6';
+  
+  // Allow redirect after a short delay
+  setTimeout(function() {
+    window.location.href = btn.getAttribute('data-href');
+  }, 100);
+  
+  event.preventDefault();
+  return false;
+}
+</script>
+
 </head>
 <body>
 <div class="card">
@@ -117,11 +153,12 @@ color:#bdbdbd;
 <p>✅ Active Trading Community</p>
 </div>
 
-<a class="btn"
-href="https://t.me/+YTYZLPxjFe8xODY1"
-onclick="fbq('track','Lead',{value:10.00,currency:'INR'});">
+<button class="btn"
+id="joinBtn"
+data-href="https://t.me/+YTYZLPxjFe8xODY1"
+onclick="trackLead(event);">
 🚀 Join Telegram Channel
-</a>
+</button>
 
 <div class="note">⏳ Limited Seats Available</div>
 <div class="small">Market investments are subject to risk.</div>
